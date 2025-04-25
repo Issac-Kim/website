@@ -6,5 +6,5 @@ https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut
 https://github.com/alessialin/BarnesHut-py/tree/main/evaluation
 Water Droplet Simulation: 
 https://sci-hub.ru/https://doi.org/10.1016/j.cag.2013.08.004
-Triangle Rasterization:
+Triangle Rasterization: ,
 https://en.wikipedia.org/wiki/Rasterisation
