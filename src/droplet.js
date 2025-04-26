@@ -17,8 +17,9 @@ class Droplet {
     }
 
     // todo: add properties to affect the movement of the droplet: friction, gravity, etc.
-    move () {
+    drip () {
         this.x += random(-1,1); // todo: might want to update the x vel based off the normal vector between the droplet and the splatter center
         this.y += random(0,1); // todo: amount of movement downwards should be affected proprotionally to the effect of natural forces 
+        this.display();
     }
 }

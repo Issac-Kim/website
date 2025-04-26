@@ -5,11 +5,16 @@ let TICK_RATE = 10;
 
 // todo: this will need to be resized to fit the screen. What happens to the existing splatters? 
 let colorGrid;
-let WIDTH;
-let HEIGHT;
+let WIDTH = window.innerWidth;
+let HEIGHT = window.innerHeight;    
 let PIXEL_DENSITY;
 let PIXELS_PER_ROW;
+let SPLATTER_SIZE = 200;
+let DROPLET_COUNT = 10;
 let COLOR;
+
+let splatters = {};
+let splatterCount = 0;
 
 let t = 0;
 
@@ -19,17 +24,21 @@ let t = 0;
 // GRID FUNCTIONS 
 // note: this might be a temporary solution and should only be used on the creation of the splatter
 function updateGrid() {
+
     // todo: consider making this a function of splatter and optimzing by only updating a square plot around center 
+    // ^ does not need to be a function of splatter, since this will only be run once per splatter
     // todo: might be a generative art thing but can preload splatter patterns with slight noise to create a more organic look
     for (let i = 0; i < HEIGHT; i++) {
         for (let j = 0; j < WIDTH; j++) {
             let index = (i*WIDTH + j) * 4;
-            let val = Math.floor(colorGrid[i][j]);  
-            pixels[index + 0] = val * 120; // R
-            pixels[index + 1] = val * 120;   // G
-            pixels[index + 2] = val * 120;   // B
-            pixels[index + 3] = 255; // A
-            colorGrid[i][j] = random(0,2);
+            let id = colorGrid[i][j];  
+            let c = splatters[id].getColor().levels;
+
+            pixels[index + 0] = c[0]; // R
+            pixels[index + 1] = c[1];   // G
+            pixels[index + 2] = c[2];   // B
+            pixels[index + 3] = c[3]; // A
+           
         }
     }
     updatePixels();
@@ -39,26 +48,26 @@ function updateGrid() {
 // P5.JS SKETCH FUNCTIONS 
 
 function setup() {
-    // setting up the canvas to the size of the window
-    WIDTH = windowWidth;
-    HEIGHT = windowHeight;
+    // global variables initialization
+    COLOR = color('red')
+
+
     let canvas = createCanvas(WIDTH, HEIGHT);
     canvas.parent('myDrawing');
+    background(255);
 
     // setting up the pixels array
     PIXEL_DENSITY = pixelDensity();
     loadPixels();
     PIXELS_PER_ROW = 4 * width * PIXEL_DENSITY;
 
-    COLOR = color('red');
 
     // setting up our color grid
     // todo: this might not be needed and can just work straight with the pixels array
     colorGrid = []
     for (let i = 0; i < HEIGHT; i++) {
-        colorGrid[i] = new Array(WIDTH).fill(random(0,2));
+        colorGrid[i] = new Array(WIDTH).fill(0);
     }
-    console.log(colorGrid); 
 }
 
 function mousePressed() {
@@ -67,15 +76,24 @@ function mousePressed() {
     y = mouseY;
 
     // todo: this should create a new splatter at x,y
-    // let splatter = new Splatter(x, y, COLOR);
+    let splatter = new Splatter(x, y, SPLATTER_SIZE, COLOR, DROPLET_COUNT, Object.keys(splatters).length);
+    splatter.display();
+    splatters[Object.keys(splatters).length] = splatter;
+    splatter.colorPixelGrid(colorGrid);
+    splatterCount += 1;
+    updateGrid();
 }
 
 function draw() {
-    fill(255, 0, 0);
+
 
     if (t % TICK_RATE == 0) {
         // todo: this will create a new splatter at x,y
-        updateGrid();
+        // updateGrid();
+        for (const [id, splatter] of Object.entries(splatters)) {
+            splatter.drip();
+        }
+
     }
     // ellipse(mouseX, mouseY, 50, 50);
     t += 1;

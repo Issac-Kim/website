@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A static website project using p5.js for creative coding.",
   "main": "src/sketch.js",
+
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --write ."

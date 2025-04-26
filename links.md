@@ -8,3 +8,5 @@ Water Droplet Simulation:
 https://sci-hub.ru/https://doi.org/10.1016/j.cag.2013.08.004
 Triangle Rasterization: ,
 https://en.wikipedia.org/wiki/Rasterisation
+Ray Tracing: 
+https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/why-are-triangles-useful.html
